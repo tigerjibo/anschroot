@@ -49,8 +49,8 @@ int main(int argc, char* argv[])
 
 	// Remove a trailing forward slash from the directory argument (if present)
 	size_t argv_1_len = strlen(argv[1]);
-	while (argv[1][argv_1_len] == '/')
-		argv[1][argv_1_len--] = '\0';
+	while (argv_1_len && argv[1][--argv_1_len] == '/')
+		argv[1][argv_1_len] = '\0';
 
 
 

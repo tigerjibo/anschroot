@@ -1,5 +1,5 @@
 # Initialise autoconf
-AC_INIT([anschroot], [1.0.0], [https://github.com/aaronmdjones/anschroot/issues], [anschroot], [https://github.com/aaronmdjones/anschroot])
+AC_INIT([anschroot], [1.0.1], [https://github.com/aaronmdjones/anschroot/issues], [anschroot], [https://github.com/aaronmdjones/anschroot])
 
 # Initialise automake
 AM_INIT_AUTOMAKE
