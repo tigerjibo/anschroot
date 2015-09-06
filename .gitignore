@@ -1,0 +1,11 @@
+/autom4te.cache/
+/anschroot
+/config.h
+/config.h.in~
+/config.log
+/config.status
+/Makefile
+/stamp-h1
+/*.o
+/.deps/
+/.dirstamp

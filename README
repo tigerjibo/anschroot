@@ -1,0 +1,28 @@
+This is a chroot on steroids, used by me primarily for chrooting into local
+Gentoo stage4 directories (used as binpkg build environments). I am making
+it available to others, as I find it useful, and you may, too.
+
+It removes a number of capabilities(7) from the process(es) which could be
+used in the chroot to compromise the host, and this also means that e.g.
+GRSecurity does not complain about denied capabilities in a chroot if you
+are running such a configured kernel.
+
+It also moves you into a new mount namespace, so that, from the parent
+(root) mount namespace perspective, you do not need e.g. proc, devpts, shm,
+etc mounted under the directory for the stage4 chroot to function correctly,
+as these are mounted in the new namespace after it is created.
+
+It also moves you into new UTS (hostname, etc), IPC (self-explanatory) and
+PID namespaces. This means the processes in the chroot can't see processes
+in the root namespace, the shell is PID 1 and thus all processes in the
+namespace will be killed if it exits, etc.
+
+NOTE:
+
+You must execute this while REPLACING the shell you're calling from!
+Otherwise, things like job control (^Z, $ jobs, etc) will not function
+correctly.
+
+You can do this e.g. as follows:
+
+  # exec anschroot /path/ /bin/bash
