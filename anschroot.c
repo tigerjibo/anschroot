@@ -39,6 +39,8 @@ extern void anschroot_umount_paths_outroot(const char* const vm_root_path);
 
 int main(int argc, char* argv[])
 {
+	char vm_root_path[PATH_MAX];
+	memset(vm_root_path, 0x00, PATH_MAX);
 
 	// Check arguments were given
 	if (argc < 3)
@@ -47,10 +49,17 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	// Remove a trailing forward slash from the directory argument (if present)
-	size_t argv_1_len = strlen(argv[1]);
-	while (argv_1_len && argv[1][--argv_1_len] == '/')
-		argv[1][argv_1_len] = '\0';
+	/* Copy the directory argument so we can modify it without making e.g. `ps` output
+	 * look 'weird'.
+	 *
+	 * E.g.: anschroot /path/ /foo/bar     becomes     anschroot /path  /foo/bar
+	 */
+	(void) snprintf(vm_root_path, PATH_MAX, "%s", argv[1]);
+
+	// Remove trailing forward slashes from the directory argument (if present)
+	size_t rootpath_len = strlen(vm_root_path);
+	while (rootpath_len > 1 && vm_root_path[--rootpath_len] == '/')
+		vm_root_path[rootpath_len] = '\0';
 
 
 
@@ -103,17 +112,17 @@ int main(int argc, char* argv[])
 	/**********************************/
 
 	// Unmount as many unnecessary filesystems as we can (avoid polluting /proc/mounts in the child)
-	(void) anschroot_umount_paths_outroot(argv[1]);
+	(void) anschroot_umount_paths_outroot(vm_root_path);
 
 	// Mount filesystems that the child will need
-	if (anschroot_mount_paths_inroot(argv[1]) != 0)
+	if (anschroot_mount_paths_inroot(vm_root_path) != 0)
 	{
 		(void) fprintf(stderr, "nschroot[child]: mount(2): %s\n", strerror(errno));
 		return EXIT_FAILURE;
 	}
 
 	// Change root filesystem
-	if (chroot(argv[1]) != 0)
+	if (chroot(vm_root_path) != 0)
 	{
 		(void) fprintf(stderr, "nschroot[child]: chroot(2): %s\n", strerror(errno));
 		return EXIT_FAILURE;

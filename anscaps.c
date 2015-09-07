@@ -46,7 +46,7 @@ int anschroot_drop_caps(void)
 
 		//   Filesystem:
 		CAP_CHOWN, CAP_DAC_OVERRIDE, CAP_DAC_READ_SEARCH, CAP_FOWNER,
-		CAP_FSETID, CAP_SETFCAP,
+		CAP_FSETID,
 
 		//   Processes:
 		CAP_KILL, CAP_SETGID, CAP_SETUID, CAP_SETPCAP, CAP_IPC_LOCK,

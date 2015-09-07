@@ -1,3 +1,10 @@
+Version 1.0.2
+=============
+
+* Remove CAP_SETFCAP from processes
+* Don't modify argv[] in-place
+* Don't fail to chroot into /
+
 Version 1.0.1
 =============
 
